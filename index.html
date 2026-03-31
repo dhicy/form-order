@@ -1049,7 +1049,11 @@
   };
 
   const qtys = { coklatkeju: 0, coklat: 0 };
-  let selectedPay = 'Transfer BCA';
+  // selectedPay menyimpan { nama, detail } dari metode yang dipilih
+  let selectedPay = {
+    nama:   'Transfer BCA',
+    detail: '2990935087 · a.n Mohamad Dhicy Ramdhani'
+  };
 
   // Promo state
   let promoAktif = null; // { kode, persen, maksDiskon }
@@ -1094,7 +1098,11 @@
   function selectPay(el) {
     document.querySelectorAll('.pay-row').forEach(r => r.classList.remove('sel'));
     el.classList.add('sel');
-    selectedPay = el.dataset.pay;
+    const detailEl = el.querySelector('.pay-detail');
+    selectedPay = {
+      nama:   el.dataset.pay,
+      detail: detailEl ? detailEl.textContent.trim() : ''
+    };
   }
 
   // ── PROMO ──────────────────────────────────────────
@@ -1216,7 +1224,7 @@
       items: items.map(i => `${i.name} x${i.qty}`).join('; '),
       subtotal: subtotalVal, diskon: diskonVal, grandTotal,
       kodePromo, name, phone, address: addr, note,
-      payment: selectedPay, status: 'Pending'
+      payment: selectedPay.nama + (selectedPay.detail ? ' — ' + selectedPay.detail : ''), status: 'Pending'
     };
 
     document.getElementById('overlayLoading').classList.add('show');
@@ -1256,7 +1264,7 @@ Nama   : ${name}
 WA     : ${phone}
 Alamat : ${addr}${note ? `\nCatatan: ${note}` : ''}
 ━━━━━━━━━━━━━━━
-=== Pembayaran via *${selectedPay}*
+=== Pembayaran via *${selectedPay.nama}*${selectedPay.detail ? `\n    No/Rek     : ${selectedPay.detail}` : ''}
 ━━━━━━━━━━━━━━━
 Mohon konfirmasi, Kak!`
     );
