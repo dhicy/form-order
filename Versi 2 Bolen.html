@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Order Bolen Premium</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --cream: #FFF8EF;
+      --brown-dark: #2C1A0E;
+      --brown-light: #C4855A;
+      --gold: #D4A853;
+      --gold-light: #F0C87A;
+      --bg: #1A0F06;
+      --card: #221308;
+      --card2: #2C1A0A;
+      --border: rgba(212,168,83,0.22);
+      --muted: rgba(255,248,239,0.45);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      font-family: 'DM Sans', sans-serif;
+      color: var(--cream);
+      min-height: 100vh;
+      padding: 2rem 1rem 3rem;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background:
+        radial-gradient(ellipse 70% 50% at 15% 10%, rgba(196,133,90,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 70% at 85% 90%, rgba(212,168,83,0.05) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: radial-gradient(rgba(212,168,83,0.05) 1px, transparent 1px);
+      background-size: 28px 28px;
+      pointer-events: none;
+    }
+
+    .wrap {
+      max-width: 500px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .header {
+      text-align: center;
+      padding: 1.5rem 0 2rem;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .badge {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--gold), var(--brown-light));
+      color: var(--brown-dark);
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.9rem;
+      border-radius: 100px;
+      margin-bottom: 0.9rem;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 7vw, 2.8rem);
+      font-weight: 900;
+      line-height: 1.05;
+      background: linear-gradient(135deg, var(--gold-light), var(--brown-light) 50%, var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .tagline {
+      margin-top: 0.5rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+      letter-spacing: 0.03em;
+    }
+
+    .section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,248,239,0.04);
+      animation: fadeUp 0.6s ease both;
+    }
+    .section:nth-child(2) { animation-delay: 0.05s; }
+    .section:nth-child(3) { animation-delay: 0.10s; }
+    .section:nth-child(4) { animation-delay: 0.15s; }
+    .section:nth-child(5) { animation-delay: 0.20s; }
+
+    .sec-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      color: var(--gold-light);
+      margin-bottom: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .sec-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* PRODUCT ROW */
+    .product-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: var(--card2);
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      padding: 1rem;
+      margin-bottom: 0.65rem;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .product-row.has-qty {
+      border-color: var(--gold);
+      background: rgba(212,168,83,0.07);
+    }
+
+    .prod-emoji { font-size: 1.6rem; flex-shrink: 0; }
+
+    .prod-info { flex: 1; min-width: 0; }
+    .prod-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.98rem;
+      color: var(--cream);
+    }
+    .prod-price { font-size: 0.78rem; color: var(--gold); margin-top: 0.1rem; }
+    .prod-desc  { font-size: 0.7rem;  color: var(--muted); margin-top: 0.1rem; }
+
+    .qty-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      flex-shrink: 0;
+    }
+
+    .q-btn {
+      width: 30px; height: 30px;
+      border-radius: 8px;
+      border: 1.5px solid var(--border);
+      background: rgba(212,168,83,0.08);
+      color: var(--gold);
+      font-size: 1.1rem;
+      line-height: 1;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.15s;
+      user-select: none;
+    }
+    .q-btn:hover { background: rgba(212,168,83,0.2); border-color: var(--gold); }
+
+    .q-num {
+      width: 26px;
+      text-align: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: var(--cream);
+    }
+
+    .subtotal-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(212,168,83,0.07);
+      border: 1px solid rgba(212,168,83,0.2);
+      border-radius: 10px;
+      padding: 0.72rem 1rem;
+      margin-top: 0.4rem;
+    }
+    .sub-label { font-size: 0.8rem; color: var(--muted); }
+    .sub-val   { font-family: 'Playfair Display', serif; font-size: 1.15rem; color: var(--gold); }
+
+    /* FIELDS */
+    .field { margin-bottom: 0.95rem; }
+    .field:last-child { margin-bottom: 0; }
+
+    label {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.38rem;
+    }
+
+    input[type="text"], input[type="tel"] {
+      width: 100%;
+      background: rgba(255,248,239,0.04);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--cream);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.93rem;
+      padding: 0.68rem 0.9rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(212,168,83,0.1);
+    }
+    input::placeholder { color: rgba(255,248,239,0.2); }
+
+    .err {
+      font-size: 0.73rem;
+      color: #FF7070;
+      margin-top: 0.3rem;
+      display: none;
+    }
+    .err.show { display: block; }
+
+    /* PAYMENT */
+    .pay-list { display: flex; flex-direction: column; gap: 0.5rem; }
+
+    .pay-row {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      background: var(--card2);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 0.82rem 1rem;
+      cursor: pointer;
+      transition: all 0.18s;
+    }
+    .pay-row:hover { border-color: rgba(212,168,83,0.4); }
+    .pay-row.sel { border-color: var(--gold); background: rgba(212,168,83,0.08); }
+
+    .pay-ico  { font-size: 1.35rem; width: 28px; text-align: center; flex-shrink: 0; }
+    .pay-info { flex: 1; }
+    .pay-name { font-size: 0.9rem; font-weight: 500; }
+    .pay-detail { font-size: 0.72rem; color: var(--muted); margin-top: 0.08rem; }
+
+    .pay-radio {
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.15s;
+    }
+    .pay-row.sel .pay-radio { border-color: var(--gold); background: var(--gold); }
+    .pay-row.sel .pay-radio::after {
+      content: '';
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--brown-dark);
+    }
+
+    /* PROMO */
+    .promo-wrap {
+      display: flex;
+      gap: 0.5rem;
+      align-items: flex-start;
+    }
+    .promo-wrap input {
+      flex: 1;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+    }
+    .btn-promo {
+      flex-shrink: 0;
+      background: rgba(212,168,83,0.12);
+      border: 1.5px solid var(--border);
+      color: var(--gold);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 0.68rem 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.18s;
+      white-space: nowrap;
+    }
+    .btn-promo:hover { background: rgba(212,168,83,0.22); border-color: var(--gold); }
+    .btn-promo:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .promo-result {
+      margin-top: 0.5rem;
+      font-size: 0.8rem;
+      padding: 0.6rem 0.85rem;
+      border-radius: 8px;
+      display: none;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .promo-result.ok {
+      display: flex;
+      background: rgba(37,211,102,0.08);
+      border: 1px solid rgba(37,211,102,0.25);
+      color: #4CE87A;
+    }
+    .promo-result.fail {
+      display: flex;
+      background: rgba(255,100,100,0.08);
+      border: 1px solid rgba(255,100,100,0.25);
+      color: #FF8080;
+    }
+
+    .subtotal-detail {
+      display: none;
+      flex-direction: column;
+      gap: 0.3rem;
+      margin-top: 0.4rem;
+    }
+    .subtotal-detail.show { display: flex; }
+
+    .sub-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      padding: 0.4rem 1rem;
+    }
+    .sub-row .sub-label { color: var(--muted); }
+    .sub-row .sub-val   { color: var(--cream); }
+    .sub-row.diskon .sub-val { color: #4CE87A; }
+    .sub-row.total-final {
+      background: rgba(212,168,83,0.07);
+      border: 1px solid rgba(212,168,83,0.2);
+      border-radius: 10px;
+      padding: 0.72rem 1rem;
+    }
+    .sub-row.total-final .sub-label { color: var(--cream); font-weight: 600; font-size: 0.85rem; }
+    .sub-row.total-final .sub-val   { font-family: 'Playfair Display', serif; font-size: 1.15rem; color: var(--gold); }
+
+
+    /* PROMO */
+    .promo-wrap {
+      display: flex;
+      gap: 0.5rem;
+    }
+    .promo-wrap input {
+      flex: 1;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+    }
+    .btn-promo {
+      flex-shrink: 0;
+      background: rgba(212,168,83,0.1);
+      border: 1.5px solid var(--border);
+      color: var(--gold);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 0.68rem 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.18s;
+      white-space: nowrap;
+    }
+    .btn-promo:hover { background: rgba(212,168,83,0.22); border-color: var(--gold); }
+    .btn-promo:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .promo-result {
+      margin-top: 0.5rem;
+      font-size: 0.8rem;
+      padding: 0.6rem 0.85rem;
+      border-radius: 8px;
+      display: none;
+      align-items: center;
+      gap: 0.5rem;
+      line-height: 1.4;
+    }
+    .promo-result.ok   { display: flex; background: rgba(37,211,102,0.08); border: 1px solid rgba(37,211,102,0.25); color: #4CE87A; }
+    .promo-result.fail { display: flex; background: rgba(255,100,100,0.08); border: 1px solid rgba(255,100,100,0.25); color: #FF8080; }
+
+    .subtotal-detail { display: none; flex-direction: column; gap: 0.3rem; margin-top: 0.4rem; }
+    .subtotal-detail.show { display: flex; }
+
+    .sub-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      padding: 0.38rem 1rem;
+    }
+    .sub-row .sub-label { color: var(--muted); }
+    .sub-row .sub-val   { color: var(--cream); }
+    .sub-row.diskon .sub-val { color: #4CE87A; font-weight: 600; }
+    .sub-row.total-final {
+      background: rgba(212,168,83,0.07);
+      border: 1px solid rgba(212,168,83,0.2);
+      border-radius: 10px;
+      padding: 0.72rem 1rem;
+      margin-top: 0.1rem;
+    }
+    .sub-row.total-final .sub-label { color: var(--cream); font-weight: 600; font-size: 0.85rem; }
+    .sub-row.total-final .sub-val   { font-family: 'Playfair Display', serif; font-size: 1.15rem; color: var(--gold); }
+
+    .wa-note {
+      background: rgba(37,211,102,0.07);
+      border: 1px solid rgba(37,211,102,0.18);
+      border-radius: 10px;
+      padding: 0.8rem 1rem;
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.6;
+      margin-bottom: 1.1rem;
+    }
+    .wa-note strong { color: #4CE87A; }
+
+    .btn-submit {
+      width: 100%;
+      background: linear-gradient(135deg, #25D366, #1aab52);
+      border: none;
+      color: white;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      padding: 1rem;
+      border-radius: 14px;
+      cursor: pointer;
+      box-shadow: 0 6px 24px rgba(37,211,102,0.28);
+      transition: all 0.2s;
+    }
+    .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(37,211,102,0.38); }
+    .btn-submit:active { transform: none; }
+
+    .overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(26,15,6,0.88);
+      z-index: 200;
+      align-items: center; justify-content: center;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .overlay.show { display: flex; }
+
+    .spinner {
+      width: 38px; height: 38px;
+      border: 3px solid rgba(212,168,83,0.2);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    .ov-icon  { font-size: 2.8rem; }
+    .ov-title { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: var(--gold); }
+    .ov-sub   { font-size: 0.85rem; color: var(--muted); text-align: center; line-height: 1.6; padding: 0 2rem; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+<div class="overlay" id="overlayLoading">
+  <div class="spinner"></div>
+  <div style="color:var(--gold);font-size:0.9rem">Menyimpan pesanan...</div>
+</div>
+
+<div class="overlay" id="overlaySuccess">
+  <div class="ov-icon">✅</div>
+  <div class="ov-title">Pesanan Disimpan!</div>
+  <div class="ov-sub">Sebentar lagi kamu akan diarahkan ke WhatsApp admin untuk konfirmasi pembayaran.</div>
+</div>
+
+<div class="wrap">
+
+  <div class="header">
+    <div class="badge">🍞 Homemade · Fresh Daily</div>
+    <h1>Order Bolen<br/>Premium</h1>
+    <p class="tagline">Pesan sekarang · Bayar mudah · Antar ke rumah</p>
+  </div>
+
+  <!-- PRODUK -->
+  <div class="section">
+    <div class="sec-title">🛒 Pilih Produk</div>
+
+    <div class="product-row" id="row-coklatkeju">
+      <div class="prod-emoji">🍫</div>
+      <div class="prod-info">
+        <div class="prod-name">Bolen Coklat Keju</div>
+        <div class="prod-price">Rp 40.000 / box</div>
+        <div class="prod-desc">Coklat lumer + keju gurih</div>
+      </div>
+      <div class="qty-wrap">
+        <button class="q-btn" onclick="changeQty('coklatkeju',-1)">−</button>
+        <div class="q-num" id="qty-coklatkeju">0</div>
+        <button class="q-btn" onclick="changeQty('coklatkeju',1)">+</button>
+      </div>
+    </div>
+
+    <div class="product-row" id="row-coklat">
+      <div class="prod-emoji">🍫</div>
+      <div class="prod-info">
+        <div class="prod-name">Bolen Coklat</div>
+        <div class="prod-price">Rp 38.000 / box</div>
+        <div class="prod-desc">Coklat belgia premium</div>
+      </div>
+      <div class="qty-wrap">
+        <button class="q-btn" onclick="changeQty('coklat',-1)">−</button>
+        <div class="q-num" id="qty-coklat">0</div>
+        <button class="q-btn" onclick="changeQty('coklat',1)">+</button>
+      </div>
+    </div>
+
+    <!-- Subtotal sederhana (tanpa promo) -->
+    <div class="subtotal-bar" id="subtotalSimple">
+      <span class="sub-label">Estimasi Total</span>
+      <span class="sub-val" id="subtotal">Rp 0</span>
+    </div>
+
+    <!-- Detail harga saat promo aktif -->
+    <div class="subtotal-detail" id="subtotalDetail">
+      <div class="sub-row">
+        <span class="sub-label">Subtotal</span>
+        <span class="sub-val" id="detailSubtotal">Rp 0</span>
+      </div>
+      <div class="sub-row diskon">
+        <span class="sub-label">Diskon Promo 🎉</span>
+        <span class="sub-val" id="detailDiskon">- Rp 0</span>
+      </div>
+      <div class="sub-row total-final">
+        <span class="sub-label">TOTAL BAYAR</span>
+        <span class="sub-val" id="detailTotal">Rp 0</span>
+      </div>
+    </div>
+
+    <div class="err" id="errQty">Pilih minimal 1 produk</div>
+  </div>
+
+  <!-- KODE PROMO -->
+  <div class="section">
+    <div class="sec-title">🎁 Kode Promo</div>
+    <div class="field">
+      <label>Masukkan Kode Promo (opsional)</label>
+      <div class="promo-wrap">
+        <input type="text" id="promoInput" placeholder="Contoh: BOLEN10" maxlength="20" oninput="resetPromo()" />
+        <button class="btn-promo" id="btnPromo" onclick="cekPromo()">Pakai</button>
+      </div>
+      <div class="promo-result" id="promoResult"></div>
+    </div>
+  </div>
+
+  <!-- DATA PEMESAN -->
+  <div class="section">
+    <div class="sec-title">👤 Data Pemesan</div>
+    <div class="field">
+      <label>Nama Lengkap</label>
+      <input type="text" id="custName" placeholder="Nama kamu..." />
+      <div class="err" id="errName">Nama tidak boleh kosong</div>
+    </div>
+    <div class="field">
+      <label>Nomor WhatsApp</label>
+      <input type="tel" id="custPhone" placeholder="08xxxxxxxxxx" />
+      <div class="err" id="errPhone">Nomor WhatsApp tidak valid</div>
+    </div>
+    <div class="field">
+      <label>Alamat Pengiriman</label>
+      <input type="text" id="custAddr" placeholder="Jl. Nama Jalan No. xx, Kota..." />
+      <div class="err" id="errAddr">Alamat tidak boleh kosong</div>
+    </div>
+    <div class="field">
+      <label>Catatan (opsional)</label>
+      <input type="text" id="custNote" placeholder="Pesan khusus, dll." />
+    </div>
+  </div>
+
+  <!-- PEMBAYARAN -->
+  <div class="section">
+    <div class="sec-title">💳 Metode Pembayaran</div>
+    <div class="pay-list">
+      <div class="pay-row sel" data-pay="Transfer BCA" onclick="selectPay(this)">
+        <div class="pay-ico">🏦</div>
+        <div class="pay-info">
+          <div class="pay-name">Transfer BCA</div>
+          <div class="pay-detail">1234567890 · a.n Toko Bolen</div>
+        </div>
+        <div class="pay-radio"></div>
+      </div>
+      <div class="pay-row" data-pay="Transfer BRI" onclick="selectPay(this)">
+        <div class="pay-ico">🏦</div>
+        <div class="pay-info">
+          <div class="pay-name">Transfer BRI</div>
+          <div class="pay-detail">9876543210 · a.n Toko Bolen</div>
+        </div>
+        <div class="pay-radio"></div>
+      </div>
+      <div class="pay-row" data-pay="GoPay" onclick="selectPay(this)">
+        <div class="pay-ico">💚</div>
+        <div class="pay-info">
+          <div class="pay-name">GoPay</div>
+          <div class="pay-detail">0896-8250-3686</div>
+        </div>
+        <div class="pay-radio"></div>
+      </div>
+      <div class="pay-row" data-pay="DANA" onclick="selectPay(this)">
+        <div class="pay-ico">🔵</div>
+        <div class="pay-info">
+          <div class="pay-name">DANA</div>
+          <div class="pay-detail">0896-8250-3686</div>
+        </div>
+        <div class="pay-radio"></div>
+      </div>
+      <div class="pay-row" data-pay="COD (Bayar di Tempat)" onclick="selectPay(this)">
+        <div class="pay-ico">💵</div>
+        <div class="pay-info">
+          <div class="pay-name">COD — Bayar di Tempat</div>
+          <div class="pay-detail">Konfirmasi area ke admin terlebih dahulu</div>
+        </div>
+        <div class="pay-radio"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KIRIM -->
+  <div class="section">
+    <div class="wa-note">
+      📱 Setelah klik <strong>Kirim ke WhatsApp</strong>, pesananmu otomatis tersimpan dan kamu langsung diarahkan ke chat admin untuk konfirmasi pembayaran.
+    </div>
+    <button class="btn-submit" onclick="submitOrder()">
+      📲 &nbsp;Kirim ke WhatsApp Admin
+    </button>
+  </div>
+
+</div>
+
+<script>
+  // ── CONFIG ─────────────────────────────────────────
+  const WA_NUMBER  = '6289682503686';
+  const GSHEET_URL = 'PASTE_APPS_SCRIPT_URL_DISINI';
+  // ───────────────────────────────────────────────────
+
+  const catalog = {
+    coklatkeju: { name: 'Bolen Coklat Keju', price: 40000 },
+    coklat:     { name: 'Bolen Coklat',      price: 38000 },
+  };
+
+  const qtys = { coklatkeju: 0, coklat: 0 };
+  let selectedPay = 'Transfer BCA';
+
+  // Promo state
+  let promoAktif = null; // { kode, persen, maksDiskon }
+
+  function fmt(n) {
+    return 'Rp ' + n.toLocaleString('id-ID');
+  }
+
+  function hitungSubtotal() {
+    let total = 0;
+    for (const k in catalog) total += qtys[k] * catalog[k].price;
+    return total;
+  }
+
+  function updateTampilan() {
+    const subtotal = hitungSubtotal();
+    document.getElementById('subtotal').textContent = fmt(subtotal);
+
+    if (promoAktif && subtotal > 0) {
+      const diskon = Math.min(Math.floor(subtotal * promoAktif.persen / 100), promoAktif.maksDiskon);
+      const totalAkhir = subtotal - diskon;
+
+      document.getElementById('detailSubtotal').textContent = fmt(subtotal);
+      document.getElementById('detailDiskon').textContent   = '- ' + fmt(diskon);
+      document.getElementById('detailTotal').textContent    = fmt(totalAkhir);
+
+      document.getElementById('subtotalSimple').style.display = 'none';
+      document.getElementById('subtotalDetail').classList.add('show');
+    } else {
+      document.getElementById('subtotalSimple').style.display = '';
+      document.getElementById('subtotalDetail').classList.remove('show');
+    }
+  }
+
+  function changeQty(id, delta) {
+    qtys[id] = Math.max(0, Math.min(99, qtys[id] + delta));
+    document.getElementById('qty-' + id).textContent = qtys[id];
+    document.getElementById('row-' + id).classList.toggle('has-qty', qtys[id] > 0);
+    updateTampilan();
+  }
+
+  function selectPay(el) {
+    document.querySelectorAll('.pay-row').forEach(r => r.classList.remove('sel'));
+    el.classList.add('sel');
+    selectedPay = el.dataset.pay;
+  }
+
+  // ── PROMO ──────────────────────────────────────────
+  function resetPromo() {
+    promoAktif = null;
+    document.getElementById('promoResult').className = 'promo-result';
+    updateTampilan();
+  }
+
+  async function cekPromo() {
+    const kode = document.getElementById('promoInput').value.trim().toUpperCase();
+    if (!kode) return;
+
+    const btn = document.getElementById('btnPromo');
+    const hasil = document.getElementById('promoResult');
+    btn.disabled = true;
+    btn.textContent = '...';
+
+    try {
+      // Kalau pakai Google Apps Script (doGet/doPost), gunakan google.script.run
+      // Kalau standalone, gunakan fetch ke GSHEET_URL
+      let data;
+
+      if (typeof google !== 'undefined' && google.script) {
+        // Mode Apps Script
+        data = await new Promise((res, rej) => {
+          google.script.run
+            .withSuccessHandler(res)
+            .withFailureHandler(rej)
+            .checkPromo(kode);
+        });
+      } else if (GSHEET_URL && GSHEET_URL !== 'PASTE_APPS_SCRIPT_URL_DISINI') {
+        // Mode external fetch
+        const r = await fetch(GSHEET_URL + '?action=promo&kode=' + encodeURIComponent(kode));
+        data = await r.json();
+      } else {
+        // DEMO mode (tanpa backend) — hapus blok ini saat deploy sungguhan
+        const demoPromo = {
+          'BOLEN10':  { valid: true, persen: 10, maksDiskon: 50000,  pesan: 'Promo BOLEN10 aktif! Diskon 10%' },
+          'HEMAT20':  { valid: true, persen: 20, maksDiskon: 80000,  pesan: 'Promo HEMAT20 aktif! Diskon 20%' },
+          'LEBARAN':  { valid: true, persen: 15, maksDiskon: 100000, pesan: 'Promo LEBARAN aktif! Diskon 15%' },
+        };
+        data = demoPromo[kode] || { valid: false, pesan: 'Kode promo tidak valid atau sudah tidak aktif' };
+      }
+
+      if (data && data.valid) {
+        promoAktif = { kode, persen: data.persen, maksDiskon: data.maksDiskon };
+        hasil.className = 'promo-result ok';
+        hasil.innerHTML = '✅ ' + data.pesan;
+      } else {
+        promoAktif = null;
+        hasil.className = 'promo-result fail';
+        hasil.innerHTML = '❌ ' + (data ? data.pesan : 'Gagal cek promo');
+      }
+    } catch (e) {
+      promoAktif = null;
+      hasil.className = 'promo-result fail';
+      hasil.innerHTML = '❌ Gagal terhubung ke server';
+    }
+
+    btn.disabled = false;
+    btn.textContent = promoAktif ? 'Aktif ✓' : 'Pakai';
+    updateTampilan();
+  }
+  // ──────────────────────────────────────────────────
+
+  function validate() {
+    let ok = true;
+    const totalQty = Object.values(qtys).reduce((a, b) => a + b, 0);
+    const errQty = document.getElementById('errQty');
+    if (totalQty === 0) { errQty.classList.add('show'); ok = false; }
+    else errQty.classList.remove('show');
+
+    const name = document.getElementById('custName').value.trim();
+    document.getElementById('errName').classList.toggle('show', !name);
+    if (!name) ok = false;
+
+    const phone = document.getElementById('custPhone').value.trim();
+    const phoneOk = /^08\d{8,12}$/.test(phone);
+    document.getElementById('errPhone').classList.toggle('show', !phoneOk);
+    if (!phoneOk) ok = false;
+
+    const addr = document.getElementById('custAddr').value.trim();
+    document.getElementById('errAddr').classList.toggle('show', !addr);
+    if (!addr) ok = false;
+
+    return ok;
+  }
+
+  async function submitOrder() {
+    if (!validate()) { window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
+
+    const name  = document.getElementById('custName').value.trim();
+    const phone = document.getElementById('custPhone').value.trim();
+    const addr  = document.getElementById('custAddr').value.trim();
+    const note  = document.getElementById('custNote').value.trim();
+    const orderId = 'ORD-' + Date.now().toString().slice(-6);
+    const now = new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' });
+
+    const items = [];
+    let subtotalVal = 0;
+    for (const id in catalog) {
+      if (qtys[id] > 0) {
+        const sub = qtys[id] * catalog[id].price;
+        subtotalVal += sub;
+        items.push({ name: catalog[id].name, qty: qtys[id], price: catalog[id].price, sub });
+      }
+    }
+
+    let diskonVal = 0;
+    if (promoAktif) {
+      diskonVal = Math.min(Math.floor(subtotalVal * promoAktif.persen / 100), promoAktif.maksDiskon);
+    }
+    const grandTotal = subtotalVal - diskonVal;
+    const kodePromo  = promoAktif ? promoAktif.kode : '';
+
+    const orderData = {
+      orderId, timestamp: now,
+      items: items.map(i => `${i.name} x${i.qty}`).join('; '),
+      subtotal: subtotalVal, diskon: diskonVal, grandTotal,
+      kodePromo, name, phone, address: addr, note,
+      payment: selectedPay, status: 'Pending'
+    };
+
+    document.getElementById('overlayLoading').classList.add('show');
+    try {
+      if (typeof google !== 'undefined' && google.script) {
+        await new Promise((res, rej) => {
+          google.script.run.withSuccessHandler(res).withFailureHandler(rej).saveOrder(orderData);
+        });
+      } else if (GSHEET_URL && GSHEET_URL !== 'PASTE_APPS_SCRIPT_URL_DISINI') {
+        await fetch(GSHEET_URL, {
+          method: 'POST', mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(orderData)
+        });
+      }
+    } catch (e) { console.warn('Sheet:', e); }
+
+    document.getElementById('overlayLoading').classList.remove('show');
+    document.getElementById('overlaySuccess').classList.add('show');
+
+    const itemLines = items.map(i => `  • ${i.name} x${i.qty} = ${fmt(i.sub)}`).join('\n');
+    const promoLine = promoAktif ? `\n🎁 Promo    : ${kodePromo} (diskon ${fmt(diskonVal)})` : '';
+
+    const msg = encodeURIComponent(
+`🍞 *PESANAN BOLEN* 🍞
+━━━━━━━━━━━━━━━
+🔖 No. Order : *${orderId}*
+📅 Waktu     : ${now}
+━━━━━━━━━━━━━━━
+🧾 *Detail Pesanan*
+${itemLines}${promoLine}
+━━━━━━━━━━━━━━━
+*TOTAL BAYAR : ${fmt(grandTotal)}*
+━━━━━━━━━━━━━━━
+👤 *Data Pemesan*
+Nama   : ${name}
+WA     : ${phone}
+Alamat : ${addr}${note ? `\nCatatan: ${note}` : ''}
+━━━━━━━━━━━━━━━
+💳 Pembayaran via *${selectedPay}*
+━━━━━━━━━━━━━━━
+Mohon konfirmasi, Kak! 🙏`
+    );
+
+    setTimeout(() => {
+      window.open(`https://wa.me/${WA_NUMBER}?text=${msg}`, '_blank');
+      document.getElementById('overlaySuccess').classList.remove('show');
+    }, 1800);
+  }
+</script>
+</body>
+</html>
